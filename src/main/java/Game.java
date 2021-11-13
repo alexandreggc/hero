@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Game {
     public Screen screen;
-    private Hero hero;
+    private Arena arena;
 
     public Game(){
         try {
@@ -24,13 +24,7 @@ public class Game {
         } catch (IOException e){
             e.printStackTrace();
         }
-        hero = new Hero(10, 10);
-    }
-
-    private void draw() throws IOException {
-        screen.clear();
-        hero.draw(screen);
-        screen.refresh();
+        arena = new Arena(40, 20);
     }
 
     public void run() throws IOException {
@@ -49,15 +43,12 @@ public class Game {
     }
 
     private void processKey(KeyStroke key) throws IOException {
-        switch(key.getKeyType()){
-            case ArrowDown -> moveHero(hero.moveDown());
-            case ArrowUp -> moveHero(hero.moveUp());
-            case ArrowLeft -> moveHero(hero.moveLeft());
-            case ArrowRight -> moveHero(hero.moveRight());
-        }
+        arena.processKey(key);
     }
 
-    private void moveHero(Position position) {
-        hero.setPosition(position);
+    private void draw() throws IOException {
+        screen.clear();
+        arena.draw(screen);
+        screen.refresh();
     }
 }
