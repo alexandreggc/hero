@@ -13,7 +13,6 @@ public class Game {
     private Hero hero;
 
     public Game(){
-        hero = new Hero(10, 10);
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
@@ -25,6 +24,7 @@ public class Game {
         } catch (IOException e){
             e.printStackTrace();
         }
+        hero = new Hero(10, 10);
     }
 
     private void draw() throws IOException {
@@ -50,10 +50,14 @@ public class Game {
 
     private void processKey(KeyStroke key) throws IOException {
         switch(key.getKeyType()){
-            case ArrowDown -> hero.moveDown();
-            case ArrowUp -> hero.moveUp();
-            case ArrowLeft -> hero.moveLeft();
-            case ArrowRight -> hero.moveRight();
+            case ArrowDown -> moveHero(hero.moveDown());
+            case ArrowUp -> moveHero(hero.moveUp());
+            case ArrowLeft -> moveHero(hero.moveLeft());
+            case ArrowRight -> moveHero(hero.moveRight());
         }
+    }
+
+    private void moveHero(Position position) {
+        hero.setPosition(position);
     }
 }
