@@ -9,22 +9,25 @@ import com.googlecode.lanterna.input.KeyStroke;
 import java.io.IOException;
 
 public class Game {
-    public Screen screen;
+    private Screen screen;
     private Arena arena;
 
     public Game(){
+        final int WIDTH = 40;
+        final int HEIGHT = 20;
+
+        arena = new Arena(WIDTH, HEIGHT);
         try {
-            TerminalSize terminalSize = new TerminalSize(40, 20);
+            TerminalSize terminalSize = new TerminalSize(WIDTH, HEIGHT);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
             Terminal terminal = terminalFactory.createTerminal();
             screen = new TerminalScreen(terminal);
-            screen.setCursorPosition(null); // we don't need a cursor
-            screen.startScreen(); // screens must be started
-            screen.doResizeIfNecessary(); // resize screen if necessary
+            screen.setCursorPosition(null);
+            screen.startScreen();
+            screen.doResizeIfNecessary();
         } catch (IOException e){
             e.printStackTrace();
         }
-        arena = new Arena(40, 20);
     }
 
     public void run() throws IOException {
@@ -48,7 +51,7 @@ public class Game {
 
     private void draw() throws IOException {
         screen.clear();
-        arena.draw(screen);
+        arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
 }
