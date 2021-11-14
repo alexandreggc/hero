@@ -9,25 +9,26 @@ public class Hero extends Element{
     }
 
     public Position moveUp() {
-        return new Position(position.getX(), position.getY() - 1);
+        return new Position(this.getPosition().getX(), this.getPosition().getY() - 1);
     }
 
     public Position moveDown() {
-        return new Position(position.getX(), position.getY() + 1);
+        return new Position(this.getPosition().getX(), this.getPosition().getY() + 1);
     }
 
     public Position moveRight() {
-        return new Position(position.getX() + 1, position.getY());
+        return new Position(this.getPosition().getX() + 1, this.getPosition().getY());
     }
 
     public Position moveLeft() {
-        return new Position(position.getX() - 1, position.getY());
+        return new Position(this.getPosition().getX() - 1, this.getPosition().getY());
     }
 
+    @Override
     public void draw(TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#FF5733"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
+        graphics.putString(new TerminalPosition(this.getPosition().getX(), this.getPosition().getY()), "X");
         //graphics.putString(new TerminalPosition(position.getX() * 2, position.getY() * 2), "\\/");
         //graphics.putString(new TerminalPosition(position.getX() * 2, position.getY() * 2 + 1), "/\\");
     }

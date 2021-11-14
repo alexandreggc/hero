@@ -8,9 +8,10 @@ public class Wall extends Element{
         super(x, y);
     }
 
+    @Override
     public void draw(TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#003300"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "V");
+        graphics.putString(new TerminalPosition(this.getPosition().getX(), this.getPosition().getY()), "V");
     }
 }
