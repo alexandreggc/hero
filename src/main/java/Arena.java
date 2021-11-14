@@ -11,9 +11,10 @@ import java.util.Random;
 public class Arena {
     private final int width;
     private final int height;
-    private Hero hero;
-    private List<Wall> walls;
-    private List<Coin> coins;
+    private final Hero hero;
+    private final List<Wall> walls;
+    private final List<Coin> coins;
+    private final List<Monster> monsters;
 
     public Arena(int width, int height){
         hero = new Hero(10, 10);
@@ -21,6 +22,7 @@ public class Arena {
         this.height = height;
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
 
     public void processKey(KeyStroke key){
@@ -30,6 +32,8 @@ public class Arena {
             case ArrowLeft -> moveHero(hero.moveLeft());
             case ArrowRight -> moveHero(hero.moveRight());
         }
+        verifyMonsterCollisions();
+        moveMonsters();
     }
 
     public void draw(TextGraphics graphics){
@@ -41,7 +45,10 @@ public class Arena {
             wall.draw(graphics);
         for(Coin coin : coins)
             coin.draw(graphics);
-        hero.draw(graphics);
+        for(Monster monster : monsters)
+            monster.draw(graphics);
+        verifyMonsterCollisions();
+        if(!Game.over) hero.draw(graphics);
         retrieveCoins();
     }
 
@@ -58,11 +65,40 @@ public class Arena {
         return true;
     }
 
+    private boolean canMonsterMove(Position position) {
+        for(Monster monster : monsters) {
+            if(position.equals(monster.getPosition()))
+                return false;
+        }
+        for(Coin coin : coins){
+            if(position.equals(coin.getPosition()))
+                return false;
+        }
+        for(Wall wall : walls){
+            if(position.equals(wall.getPosition()))
+                return false;
+        }
+        return true;
+    }
+
     private boolean canPlaceCoin(Coin nextCoin, ArrayList<Coin> coins) {
-        for(Coin coin : coins)
+        for(Coin coin : coins){
             if(coin.getPosition().equals(nextCoin.getPosition()))
                 return false;
+        }
         return !nextCoin.getPosition().equals(hero.getPosition());
+    }
+
+    private boolean canPlaceMonster(Monster nextMonster, ArrayList<Monster> monsters) {
+        for(Monster monster : monsters){
+            if(monster.getPosition().equals(nextMonster.getPosition()))
+                return false;
+        }
+        for(Coin coin : coins){
+            if(coin.getPosition().equals(nextMonster.getPosition()))
+                return false;
+        }
+        return !nextMonster.getPosition().equals(hero.getPosition());
     }
 
     private List<Wall> createWalls() {
@@ -91,10 +127,42 @@ public class Arena {
         return coins;
     }
 
+    private List<Monster> createMonsters(){
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for(int i = 0; i < 5; i++){
+            Monster monster = new Monster(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1);
+            if(canPlaceMonster(monster, monsters))
+                monsters.add(monster);
+            else
+                i -= 1;
+        }
+        return monsters;
+    }
+
     private void retrieveCoins(){
         for(Coin coin : coins){
             if(hero.getPosition().equals(coin.getPosition())){
                 coins.remove(coin);
+                break;
+            }
+        }
+    }
+
+    private void moveMonsters(){
+        Position position;
+        for(Monster monster : monsters){
+            do {
+                position = monster.move();
+            } while(!canMonsterMove(position));
+            monster.setPosition(position);
+        }
+    }
+
+    public void verifyMonsterCollisions(){
+        for(Monster monster : monsters){
+            if(monster.getPosition().equals(hero.getPosition())){
+                Game.over = true;
                 break;
             }
         }

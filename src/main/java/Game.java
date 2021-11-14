@@ -10,7 +10,8 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    private Arena arena;
+    private final Arena arena;
+    public static boolean over = false;
 
     public Game(){
         final int WIDTH = 40;
@@ -32,20 +33,22 @@ public class Game {
 
     public void run() throws IOException {
         KeyStroke key;
-        while (true){
+        while(!Game.over){
             draw();
             key = screen.readInput();
+            processKey(key);
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
                 screen.close();
             }
             if (key.getKeyType() == KeyType.EOF){
                 break;
             }
-            processKey(key);
         }
+        screen.close();
+        System.out.println("Game Over");
     }
 
-    private void processKey(KeyStroke key) throws IOException {
+    private void processKey(KeyStroke key) {
         arena.processKey(key);
     }
 
