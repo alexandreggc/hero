@@ -10,6 +10,10 @@ public class Wall {
         position = new Position(x, y);
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
     public void draw(TextGraphics graphics){
         graphics.setForegroundColor(TextColor.Factory.fromString("#003300"));
         graphics.enableModifiers(SGR.BOLD);
