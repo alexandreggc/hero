@@ -36,7 +36,7 @@ public class Game {
         while(!Game.over){
             draw();
             key = screen.readInput();
-            processKey(key);
+            arena.processKey(key);
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
                 screen.close();
             }
@@ -46,10 +46,6 @@ public class Game {
         }
         screen.close();
         System.out.println("Game Over");
-    }
-
-    private void processKey(KeyStroke key) {
-        arena.processKey(key);
     }
 
     private void draw() throws IOException {

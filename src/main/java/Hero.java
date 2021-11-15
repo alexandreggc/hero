@@ -29,7 +29,5 @@ public class Hero extends Element{
         graphics.setForegroundColor(TextColor.Factory.fromString("#FF5733"));
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(this.getPosition().getX(), this.getPosition().getY()), "X");
-        //graphics.putString(new TerminalPosition(position.getX() * 2, position.getY() * 2), "\\/");
-        //graphics.putString(new TerminalPosition(position.getX() * 2, position.getY() * 2 + 1), "/\\");
     }
 }

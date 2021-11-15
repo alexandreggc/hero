@@ -39,7 +39,6 @@ public class Arena {
     public void draw(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#90FCFA"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        //graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width * 2, height * 2), ' ');
 
         for(Wall wall : walls)
             wall.draw(graphics);
