@@ -1,3 +1,4 @@
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
@@ -33,11 +34,12 @@ public class Arena {
             case ArrowRight -> moveHero(hero.moveRight());
         }
         verifyMonsterCollisions();
-        moveMonsters();
+        if(!Game.over) moveMonsters();
+        verifyMonsterCollisions();
     }
 
     public void draw(TextGraphics graphics){
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#90FCFA"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#b3ffb3"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
 
         for(Wall wall : walls)
@@ -46,8 +48,8 @@ public class Arena {
             coin.draw(graphics);
         for(Monster monster : monsters)
             monster.draw(graphics);
-        verifyMonsterCollisions();
         if(!Game.over) hero.draw(graphics);
+
         retrieveCoins();
     }
 
@@ -146,6 +148,8 @@ public class Arena {
                 break;
             }
         }
+        if(coins.size() == 0)
+            Game.win = true;
     }
 
     private void moveMonsters(){
