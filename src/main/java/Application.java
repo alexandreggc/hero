@@ -2,7 +2,11 @@ import java.io.IOException;
 
 public class Application {
     public static void main(String[] args) throws IOException {
-        Game game = new Game();
-        game.run();
+        while (true){
+            Game game = new Game();
+            game.run();
+            if(!game.playAgain())
+                break;
+        }
     }
 }

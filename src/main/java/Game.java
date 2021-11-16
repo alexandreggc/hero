@@ -39,6 +39,28 @@ public class Game {
         graphics = screen.newTextGraphics();
     }
 
+    public boolean playAgain() throws IOException {
+        drawPlayAgain();
+        Game.win = false;
+        Game.over = false;
+        while(true){
+            KeyStroke key = screen.readInput();
+            if (key.getKeyType() == KeyType.Enter){
+                screen.close();
+                return true;
+            }
+            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
+                break;
+            }
+            if (key.getKeyType() == KeyType.EOF){
+                break;
+            }
+        }
+        screen.close();
+        System.exit(0);
+        return false;
+    }
+
     public void run() throws IOException {
         KeyStroke key;
         while(true){
@@ -54,8 +76,6 @@ public class Game {
                 break;
             }
         }
-        key = screen.readInput();
-        screen.close();
     }
 
     private void draw() throws IOException {
@@ -68,8 +88,6 @@ public class Game {
         graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(15, 10), "Game Over!");
-        graphics.disableModifiers(SGR.BOLD, SGR.BLINK);
-        graphics.putString(new TerminalPosition(9, 12), "Press any key to quit.");
         screen.refresh();
         System.out.println("Game Over");
     }
@@ -79,9 +97,15 @@ public class Game {
         graphics.enableModifiers(SGR.BOLD,SGR.BLINK);
         graphics.putString(new TerminalPosition(11, 10), "Congrats, You Won!");
         graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
-        graphics.disableModifiers(SGR.BOLD, SGR.BLINK);
-        graphics.putString(new TerminalPosition(9, 12), "Press any key to quit.");
         screen.refresh();
         System.out.println("You won!");
+    }
+
+    private void drawPlayAgain() throws IOException {
+        graphics.setForegroundColor(TextColor.Factory.fromString("#000000"));
+        graphics.disableModifiers(SGR.BOLD, SGR.BLINK);
+        graphics.putString(new TerminalPosition(9, 12), "Press 'Q' key to quit.");
+        graphics.putString(new TerminalPosition(4, 14), "Press 'ENTER' key to play again.");
+        screen.refresh();
     }
 }
